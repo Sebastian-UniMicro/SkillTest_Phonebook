@@ -1,4 +1,5 @@
 <script>
+    
     // Define properties to pass data
     export let contacts = [];
   </script>

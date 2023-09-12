@@ -8,7 +8,6 @@
       <div class="modal-content" on:click={(e) => e.stopPropagation()}>
         <!-- Insert your modal content here -->
         <slot></slot>
-        <button class="modal-close" on:click={closeModal}>Close</button>
       </div>
     </div>
   {/if}
@@ -34,9 +33,5 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       max-width: 80%;
       text-align: center;
-    }
-  
-    .modal-close {
-      margin-top: 10px;
     }
   </style>
