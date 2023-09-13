@@ -5,25 +5,31 @@
     import { page } from '$app/stores';
     import Modal from './components/Modal.svelte';
     import CreateContactForm from './components/CreateContactForm.svelte';
+    import { goto } from '$app/navigation';
   
-    let contacts = [];
+    export let contacts = [];
     let accessToken = $page?.data?.session?.access_token;
 
     let isModalOpen = false;
     let visible = isModalOpen;
     let isFormValid = false;
 
+    onMount(() => { //Check session authentication
+        if (!$page?.data?.session) {
+            goto("/");
+        }
+    });
+
     onMount(async () => {
       if (!$page?.data?.session) {
-        // Handle authentication failure here
       } else {
         try {
           contacts = await fetchContacts(accessToken);
         } catch (error) {
-          // Handle API request error here
           console.error(error);
         }
       }
+      console.log("Contacts data:", contacts);
     });
 
     const openModal = () => {
@@ -67,6 +73,3 @@
 </Modal>
 
 <ContactTable {contacts} />
-
-<div><button class="destructive-btn" on:click={() => fetchContacts(accessToken)}> Test Get contacts</button></div>
-

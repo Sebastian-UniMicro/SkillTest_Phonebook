@@ -6,7 +6,7 @@
 
     onMount(() => {
         if ($page?.data?.session) {
-            goto("/home");
+            goto("/phonebook");
         }
     });
 </script>
@@ -41,7 +41,7 @@
     <div class="section">
         <span>Step 3:</span>
         <p>Click the log in button below after completing the steps above :)</p>
-        <button on:click={() => signIn("softrig", { callbackUrl: "/home" })}>
+        <button on:click={() => signIn("softrig", { callbackUrl: "/phonebook" })}>
             Log in
         </button>
     </div>

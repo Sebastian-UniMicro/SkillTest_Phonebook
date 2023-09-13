@@ -8,6 +8,7 @@
     let name = "";
     let phone = "";
     let email = "";
+    let comment = "";
     let isFormValid = true;
 
     const close = () => {
@@ -21,15 +22,29 @@
         }
         const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts`;
 
-        const formattedData = {
-    data: {
-      attributes: {
-        name,
-        phone,
-        email,
+        const contactData = {
+  "Info": {
+    "Name": name,
+    "InvoiceAddress": {
+        "AddressLine1": "",
+        "AddressLine2": "",
+        "AddressLine3": "",
+        "City": "",
+        "Country": "",
+        "CountryCode": "",
+        "PostalCode": ""
       },
-    },
-  };
+    "DefaultPhone": {
+        "CountryCode": "",
+        "Description": "",
+        "Number": phone
+      },
+    "DefaultEmail": {
+        "EmailAddress": email
+      }
+  },
+  "Comment": comment
+    };
 
         try {
             const response = await fetch(url, {
@@ -38,7 +53,7 @@
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${accessToken}`,
                 },
-                body: JSON.stringify(formattedData),
+                body: JSON.stringify(contactData),
             });
 
             if (!response.ok) {
@@ -67,7 +82,7 @@
 
 <form>
     <div>
-        <label for="name">Name:</label>
+        <label for="name">Name *</label>
         <input
             type="text"
             id="name"
@@ -76,7 +91,7 @@
         />
     </div>
     <div>
-        <label for="phone">Phone:</label>
+        <label for="phone">Phone *</label>
         <input
             type="text"
             id="phone"
@@ -85,12 +100,19 @@
         />
     </div>
     <div>
-        <label for="email">Email:</label>
+        <label for="email">Email *</label>
         <input
             type="text"
             id="email"
             bind:value={email}
             on:input={validateForm}
+        />
+    </div>
+    <div>
+        <label for="comment">Comment</label>
+        <textarea
+            id="comment"
+            bind:value={comment}
         />
     </div>
     <div>
@@ -103,4 +125,9 @@
     .modal-close {
         margin-top: 10px;
     }
+
+    textarea {
+		width: 100%;
+		height: 200px;
+	}
 </style>
