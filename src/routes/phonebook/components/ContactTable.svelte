@@ -1,5 +1,7 @@
   <script>
     import EditContactForm from "./EditContactForm.svelte";
+    import DeleteContactForm from "./DeleteContactForm.svelte";
+    import Modal from "./Modal.svelte";
 
     export let contacts = [
       {
@@ -30,6 +32,11 @@
 
         let selectedContactId = null;
 
+    let isModalOpen = false;
+    let visible = isModalOpen;
+    let activeModal = null;
+    let isFormValid = false;
+
   function toggleDropdown(contact) {
     console.log("Toggling dropdown for contact:", contact);
   contact.showDropdown = !contact.showDropdown;
@@ -37,18 +44,45 @@
 
   function editContact(contact) {
     selectedContactId = contact.ID;
-
-    console.log("The contact to edit is " + contact.ID);
-  }
-
-  function closeEditForm() {
-    selectedContactId = null;
+    activeModal = "edit";
+    openModal();
   }
 
 function deleteContact(contact) {
-  // TODO Implement deletion logic here
-  // TODO You can open a confirmation modal for deletion
+  selectedContactId = contact.ID;
+  activeModal = "delete";
+  openModal();
 }
+
+const openModal = () => {
+        isModalOpen = true;
+        visible = isModalOpen; 
+    };
+
+    const closeModal = () => {
+        isModalOpen = false;
+        visible = isModalOpen;
+    };
+
+    const handleEditContactFormClose = () => {
+    closeModal();
+  };
+
+  const handleEditContact = () => {
+    if (isFormValid) {
+      closeModal();
+    }
+  };
+  
+  const handleDeleteContactFormClose = () => {
+    closeModal();
+  };
+
+  const handleDeleteContact = () => {
+    if (isFormValid) {
+      closeModal();
+    }
+  };
   </script>
   
   <table>
@@ -81,9 +115,25 @@ function deleteContact(contact) {
     </tbody>
   </table>
 
-  {#if selectedContactId !== null}
-  <EditContactForm contactId={selectedContactId} onClose={closeEditForm} />
-{/if}
+  <Modal {visible} {closeModal}>
+    {#if activeModal === "edit"}
+    <h2 class="bold">Edit Contact</h2>
+      <EditContactForm
+        on:create={handleEditContact}
+        on:close={handleEditContactFormClose}
+        bind:isFormValid={isFormValid}
+        contactId={selectedContactId}
+      />
+    {/if}
+    {#if activeModal === "delete"}
+    <h2 class="bold">Delete Contact</h2>
+      <DeleteContactForm
+        on:create={handleDeleteContact}
+        on:close={handleDeleteContactFormClose}
+        contactId={selectedContactId}
+      />
+    {/if}
+  </Modal>
 
   <style>
     .dropdown {

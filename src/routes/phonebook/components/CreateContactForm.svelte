@@ -57,15 +57,12 @@
             });
 
             if (!response.ok) {
-                const errorResponse = await response.json(); // Parse the response body
-                console.error("API error:", errorResponse); // Log the error response
+                const errorResponse = await response.json();
+                console.error("API error:", errorResponse);
                 throw new Error("Failed to create contact");
             }
-
-            // Handle success, e.g., close the modal, update the contact list, etc.
             dispatch("close");
         } catch (error) {
-            // Handle error, e.g., display an error message to the user
             console.error(error);
         }
     };

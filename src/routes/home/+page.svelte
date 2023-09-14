@@ -30,7 +30,6 @@
             })
             .then((data) => {
                 sampleReqResponse = data;
-                console.log("Data: ", data);
             })
             .catch((error) => {
                 console.error("Error: ", error);

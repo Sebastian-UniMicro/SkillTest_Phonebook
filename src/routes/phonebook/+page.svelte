@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, setContext } from 'svelte';
     import ContactTable from './components/ContactTable.svelte';
     import { fetchContacts } from './components/api';
     import { page } from '$app/stores';
@@ -20,7 +20,7 @@
         }
     });
 
-    onMount(async () => {
+    export const GetContactsForTable = (async () => {
       if (!$page?.data?.session) {
       } else {
         try {
@@ -29,7 +29,21 @@
           console.error(error);
         }
       }
-      console.log("Contacts data:", contacts);
+    });
+
+        export async function getContactsForTable() {
+      if (!$page?.data?.session) {
+      } else {
+        try {
+          contacts = await fetchContacts(accessToken);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    onMount(async () => {
+      GetContactsForTable();
     });
 
     const openModal = () => {
@@ -43,19 +57,15 @@
     };
 
     const handleCreateContactFormClose = () => {
-    closeModal(); // Close the modal when the 'close' event is emitted
+    closeModal();
   };
 
   const handleCreateContact = () => {
-    // Validate the form before creating a contact
     if (isFormValid) {
-      // Perform contact creation logic here, if form is valid
-      // You can call an API to create the contact
-      // After contact creation, close the modal and update the contact list
-      closeModal(); // Close the modal
-      // Add logic to create the contact and update the contact list
+      closeModal();
     }
   };
+
   </script>
   
   <div>
@@ -73,3 +83,5 @@
 </Modal>
 
 <ContactTable {contacts} />
+
+<button on:click={GetContactsForTable}> Update table</button>

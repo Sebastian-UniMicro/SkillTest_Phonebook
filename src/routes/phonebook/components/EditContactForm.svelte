@@ -2,7 +2,7 @@
   import { PUBLIC_API_BASE_URL } from "$env/static/public";
   import { createEventDispatcher, onMount } from "svelte";
   import { fetchSingleContact } from "./api";
-    import { page } from "$app/stores";
+  import { page } from "$app/stores";
 
   let accessToken = $page?.data?.session?.access_token;
   export let contactId;
@@ -26,7 +26,6 @@
 /*     if (!isFormValid) {
       return; // Not Valid. Prevent submission
     } */
-    console.log(contactId);
     const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts/${contactId}`;
 
     const contactData = {
@@ -52,7 +51,6 @@
     };
 
     try {
-      console.log(contactData)
       const response = await fetch(url, {
         method: 'PUT', // Use PUT for editing
         headers: {
@@ -67,7 +65,6 @@
         console.error('API error:', errorResponse);
         throw new Error('Failed to update contact');
       }
-
 
       dispatch('close');
     } catch (error) {
@@ -94,7 +91,7 @@
       phone = contactData.Info.DefaultPhone.Number;
       email = contactData.Info.DefaultEmail.EmailAddress;
       comment = contactData.Comment;
-      console.log("Phone then email id is " + contactData.Info.DefaultPhoneID + contactData.Info.DefaultEmailID);
+
       phoneID = contactData.Info.DefaultPhoneID;
       emailID = contactData.Info.DefaultEmailID;
 

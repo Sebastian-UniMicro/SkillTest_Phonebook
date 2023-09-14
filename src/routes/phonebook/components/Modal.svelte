@@ -6,7 +6,6 @@
   {#if visible}
     <div class="modal-overlay" on:click={closeModal}>
       <div class="modal-content" on:click={(e) => e.stopPropagation()}>
-        <!-- Insert your modal content here -->
         <slot></slot>
       </div>
     </div>
