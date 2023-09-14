@@ -41,6 +41,10 @@
     console.log("The contact to edit is " + contact.ID);
   }
 
+  function closeEditForm() {
+    selectedContactId = null;
+  }
+
 function deleteContact(contact) {
   // TODO Implement deletion logic here
   // TODO You can open a confirmation modal for deletion
@@ -78,7 +82,7 @@ function deleteContact(contact) {
   </table>
 
   {#if selectedContactId !== null}
-  <EditContactForm contactId={selectedContactId} />
+  <EditContactForm contactId={selectedContactId} onClose={closeEditForm} />
 {/if}
 
   <style>

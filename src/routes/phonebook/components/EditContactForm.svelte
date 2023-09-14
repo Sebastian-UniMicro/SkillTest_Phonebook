@@ -8,12 +8,14 @@
   export let contactId;
   const dispatch = createEventDispatcher();
 
-  let id = "";
   let name = "";
   let phone = "";
   let email = "";
   let comment = "";
   let isFormValid = true;
+
+  let phoneID = "";
+  let emailID = "";
 
   const close = () => {
       event.preventDefault();
@@ -21,31 +23,36 @@
   };
 
   const editContact = async () => {
-    if (!isFormValid) {
+/*     if (!isFormValid) {
       return; // Not Valid. Prevent submission
-    }
-    const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts/${id}`;
+    } */
+    console.log(contactId);
+    const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts/${contactId}`;
 
     const contactData = {
-      ID: id,
-      Info: {
-        Name: name,
-        InvoiceAddress: {
-          // ... (other fields)
-        },
-        DefaultPhone: {
-          CountryCode: '',
-          Description: '',
-          Number: phone,
-        },
-        DefaultEmail: {
-          EmailAddress: email,
-        },
-      },
-      Comment: comment,
+      "ID": contactId,
+        "InfoID": contactId,
+        "Comment": comment,
+        "Info": {
+            "Name": name,
+            "ID": contactId,
+            "DefaultEmailID": emailID,
+            "DefaultPhoneID": phoneID,
+            "DefaultPhone": {
+                "Number": phone,
+                "ID": phoneID,
+                "CountryCode": "",
+                "Description": "Mobile"
+            },
+            "DefaultEmail": {
+                "ID": emailID,
+                "EmailAddress": email
+            }
+        }
     };
 
     try {
+      console.log(contactData)
       const response = await fetch(url, {
         method: 'PUT', // Use PUT for editing
         headers: {
@@ -56,15 +63,15 @@
       });
 
       if (!response.ok) {
-        const errorResponse = await response.json(); // Parse the response body
-        console.error('API error:', errorResponse); // Log the error response
+        const errorResponse = await response.json();
+        console.error('API error:', errorResponse);
         throw new Error('Failed to update contact');
       }
 
-      // Handle success, e.g., close the modal, update the contact list, etc.
+
       dispatch('close');
     } catch (error) {
-      // Handle error, e.g., display an error message to the user
+
       console.error(error);
     }
   };
@@ -83,11 +90,13 @@
       const contactData = await fetchSingleContact(accessToken, contactId);
 
       // Populate form fields with contact data
-      id = contactData.ID;
       name = contactData.Info.Name;
       phone = contactData.Info.DefaultPhone.Number;
       email = contactData.Info.DefaultEmail.EmailAddress;
       comment = contactData.Comment;
+      console.log("Phone then email id is " + contactData.Info.DefaultPhoneID + contactData.Info.DefaultEmailID);
+      phoneID = contactData.Info.DefaultPhoneID;
+      emailID = contactData.Info.DefaultEmailID;
 
       validateForm(); // Trigger form validation
     } catch (error) {
