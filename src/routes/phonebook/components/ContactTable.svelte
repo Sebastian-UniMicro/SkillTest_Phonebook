@@ -3,32 +3,32 @@
 
     export let contacts = [
       {
-  "Info": {
-    "Name": "",
-    "InvoiceAddress": {
-        "AddressLine1": "",
-        "AddressLine2": "",
-        "AddressLine3": "",
-        "City": "",
-        "Country": "",
-        "CountryCode": "",
-        "PostalCode": ""
-      },
-    "DefaultPhone": {
-        "CountryCode": "",
-        "Description": "",
-        "Number": ""
-      },
-    "DefaultEmail": {
-        "EmailAddress": ""
+        "ID": "",
+        "Info": {
+          "Name": "",
+          "InvoiceAddress": {
+              "AddressLine1": "",
+              "AddressLine2": "",
+              "AddressLine3": "",
+              "City": "",
+              "Country": "",
+              "CountryCode": "",
+              "PostalCode": ""
+            },
+          "DefaultPhone": {
+              "CountryCode": "",
+              "Description": "",
+              "Number": ""
+            },
+          "DefaultEmail": {
+              "EmailAddress": ""
+            }
+        },
+        "Comment": "",
       }
-  },
-  "Comment": "",
-  "ID": ""
-}
-  ];
+        ];
 
-  let selectedContact = null;
+        let selectedContactId = null;
 
   function toggleDropdown(contact) {
     console.log("Toggling dropdown for contact:", contact);
@@ -36,7 +36,7 @@
 }
 
   function editContact(contact) {
-    selectedContact = contact;
+    selectedContactId = contact.ID;
 
     console.log("The contact to edit is " + contact.ID);
   }
@@ -77,9 +77,9 @@ function deleteContact(contact) {
     </tbody>
   </table>
 
-<!--   {#if selectedContact}
-  <EditContactForm {contact=selectedContact} />
-{/if} -->
+  {#if selectedContactId !== null}
+  <EditContactForm contactId={selectedContactId} />
+{/if}
 
   <style>
     .dropdown {
