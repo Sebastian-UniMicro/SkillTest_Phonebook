@@ -69,7 +69,7 @@
   </script>
   
   <div>
-    <button on:click={openModal}>Create new contact</button>
+    <button class="custom-button" on:click={openModal}>Create new contact</button>
   </div>
   
   <Modal {visible} {closeModal}>
@@ -85,3 +85,24 @@
 <ContactTable {contacts} />
 
 <button on:click={GetContactsForTable}> Update table</button>
+
+
+<style>
+    .custom-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Define styles for different button states (e.g., hover, active) */
+  .custom-button:hover {
+    background-color: #0056b3;
+  }
+
+  .custom-button:active {
+    background-color: #00408a;
+  }
+</style>

@@ -77,8 +77,8 @@
     }
 </script>
 
-<form>
-    <div>
+<form class="custom-form">
+    <div class="form-group">
         <label for="name">Name *</label>
         <input
             type="text"
@@ -87,7 +87,7 @@
             on:input={validateForm}
         />
     </div>
-    <div>
+    <div class="form-group">
         <label for="phone">Phone *</label>
         <input
             type="text"
@@ -96,7 +96,7 @@
             on:input={validateForm}
         />
     </div>
-    <div>
+    <div class="form-group">
         <label for="email">Email *</label>
         <input
             type="text"
@@ -105,15 +105,15 @@
             on:input={validateForm}
         />
     </div>
-    <div>
+    <div class="form-group">
         <label for="comment">Comment</label>
         <textarea
             id="comment"
             bind:value={comment}
         />
     </div>
-    <div>
-        <button on:click={createContact}>Create</button>
+    <div class="form-actions">
+        <button class="custom-button" on:click={createContact}>Create</button>
         <button class="modal-close" on:click={close}>Close</button>
     </div>
 </form>
@@ -127,4 +127,49 @@
 		width: 100%;
 		height: 200px;
 	}
+
+    .custom-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .form-actions {
+    text-align: right;
+  }
+
+  .custom-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .custom-button:hover {
+    background-color: #0056b3;
+  }
 </style>
