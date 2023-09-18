@@ -85,7 +85,7 @@
 <ContactTable {contacts} />
 
 <button on:click={GetContactsForTable}> Update table</button>
-
+<div><button on:click={() => goto("/home")}> check home </button></div>
 
 <style>
     .custom-button {

@@ -30,9 +30,10 @@
     },
   ];
 
-  let selectedSorting = "name"; // Default sorting criterion
+  let selectedSorting = "";
 
-  let searchQuery = ""; // Initialize search query variable
+  let searchQuery = "";
+  let debounceTimer;
 
   let selectedContactId = null;
 
@@ -44,6 +45,7 @@
   function toggleDropdown(contact) {
     console.log("Toggling dropdown for contact:", contact);
     contact.showDropdown = !contact.showDropdown;
+    console.log("You can see the dropdown = " + contact.showDropdown)
   }
 
   function editContact(contact) {
@@ -88,6 +90,7 @@
     }
   };
 
+  //SORTING
   function sortContacts() {
     contacts = contacts.slice().sort((a, b) => {
       if (selectedSorting === "name") {
@@ -130,48 +133,59 @@
   }
 
   function setSortingToName() {
-    selectedSorting = 'name';
+    selectedSorting = "name";
     sortContacts();
   }
 
   function setSortingToEmail() {
-    selectedSorting = 'email';
+    selectedSorting = "email";
     sortContacts();
   }
 
   function setSortingToPhone() {
-    selectedSorting = 'phone';
+    selectedSorting = "phone";
     sortContacts();
+  }
+
+  function handleInputChange(event) {
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+      sortContacts();
+    }, 300);
   }
 </script>
 
-<input type="text" bind:value={searchQuery} placeholder="Search contacts..." />
-
-<select bind:value={selectedSorting}> <!-- Theory, used these values bound with thead beneath as buttons to trigger + the sortContacts button -->
-  <option value="name">Name</option>
-  <option value="email">Email</option>
-  <option value="phone">Phone</option>
-</select>
-
-<button on:click={sortContacts}>Sort</button>
+<input
+  type="text"
+  bind:value={searchQuery}
+  placeholder="Search contacts..."
+  on:input={handleInputChange}
+  class="custom-search-input"
+/>
 
 <table class="custom-table">
-    <thead>
-      <tr>
-        <th>
-          <button class="custom-button" on:click={setSortingToName}>
-            {selectedSorting === "name" ? "Name *" : "Name"}</button>
-        </th>
-        <th>
-          <button class="custom-button" on:click={setSortingToPhone}>
-            {selectedSorting === "phone" ? "Phone Number *" : "Phone Number"}</button>
-        </th>
-        <th>
-          <button class="custom-button" on:click={setSortingToEmail}>
-            {selectedSorting === "email" ? "Email *" : "Email"}</button>
-        </th>
-      </tr>
-    </thead>
+  <thead>
+    <tr>
+      <th>
+        <button class="custom-button" on:click={setSortingToName}>
+          {selectedSorting === "name" ? "Name *" : "Name"}</button
+        >
+      </th>
+      <th>
+        <button class="custom-button" on:click={setSortingToPhone}>
+          {selectedSorting === "phone"
+            ? "Phone Number *"
+            : "Phone Number"}</button
+        >
+      </th>
+      <th>
+        <button class="custom-button" on:click={setSortingToEmail}>
+          {selectedSorting === "email" ? "Email *" : "Email"}</button
+        >
+      </th>
+    </tr>
+  </thead>
   <tbody>
     {#each contacts
       .filter(filterContacts)
@@ -181,14 +195,16 @@
         <td>{contact.Info.DefaultPhone.Number}</td>
         <td>{contact.Info.DefaultEmail.EmailAddress}</td>
         <td>
-          <!--             <button class="ellipsis-button" on:click={() => toggleDropdown(contact)}></button>
-            {#if contact.showDropdown}
-
-              <div class="dropdown"> -->
-          <button on:click={() => editContact(contact)}>Edit</button>
-          <button on:click={() => deleteContact(contact)}>Delete</button>
-          <!--               </div>
-            {/if} -->
+          <button
+            class="ellipsis-button"
+            on:click={() => toggleDropdown(contact)}
+            ></button>
+          {#if contact.showDropdown}
+            <div class="dropdown">
+              <button on:click={() => editContact(contact)}>Edit</button>
+              <button on:click={() => deleteContact(contact)}>Delete</button>
+            </div>
+          {/if}
         </td>
       </tr>
     {/each}
@@ -216,15 +232,23 @@
 </Modal>
 
 <style>
-  .dropdown {
-    position: absolute;
-    z-index: 1;
-    display: none;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 5px;
-  }
+.custom-search-input {
+  width: auto;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 1;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+}
 
   .dropdown button {
     display: block;
@@ -253,6 +277,7 @@
   .custom-table {
     border-collapse: collapse;
     width: 100%;
+    border: 1px solid #ddd; /* Add a border around the table */
   }
 
   /* Style the table headers */
@@ -260,6 +285,7 @@
     background-color: #f2f2f2;
     text-align: left;
     padding: 8px;
+    border-bottom: 1px solid #ddd; /* Add a bottom border to table headers */
   }
 
   /* Style the button inside the table header cell */
@@ -279,11 +305,19 @@
 
   /* Style the table rows */
   .custom-table tr {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; /* Add a bottom border to table rows */
   }
 
   /* Style the table cells */
   .custom-table td {
     padding: 8px;
+    border-bottom: 1px solid #ddd; /* Add a bottom border to table cells */
   }
+
+  /* Style the last row (footer) */
+  .custom-table tfoot tr {
+    border-top: 1px solid #ddd; /* Add a top border to the last row */
+  }
+
+
 </style>
