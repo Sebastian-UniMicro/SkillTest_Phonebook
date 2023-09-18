@@ -2,7 +2,7 @@
     import { page } from "$app/stores";
 
 
-let name = $page?.data?.session?.user?.name || "User";
+let name = $page?.data?.session?.user?.name || "Log in for";
 </script>
 
 <div class="container">
@@ -10,7 +10,10 @@ let name = $page?.data?.session?.user?.name || "User";
         <div class="logo-text-container">
             <img src="/phonebook.png" class="logo" alt="logo" />
             <p>
-                <span class="bold">{name?.charAt(0).toUpperCase() + name?.slice(1)}'s Contacts</span>
+                <span class="bold">
+                    {name?.charAt(0).toUpperCase() + name?.slice(1)}
+                    {#if name !="Log in for"}'s{/if}  Contacts
+                </span>
             </p>
         </div>
     </div>

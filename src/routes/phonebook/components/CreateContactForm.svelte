@@ -23,28 +23,28 @@
         const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts`;
 
         const contactData = {
-  "Info": {
-    "Name": name,
-    "InvoiceAddress": {
-        "AddressLine1": "",
-        "AddressLine2": "",
-        "AddressLine3": "",
-        "City": "",
-        "Country": "",
-        "CountryCode": "",
-        "PostalCode": ""
-      },
-    "DefaultPhone": {
-        "CountryCode": "",
-        "Description": "",
-        "Number": phone
-      },
-    "DefaultEmail": {
-        "EmailAddress": email
-      }
-  },
-  "Comment": comment
-    };
+            Info: {
+                Name: name,
+                InvoiceAddress: {
+                    AddressLine1: "",
+                    AddressLine2: "",
+                    AddressLine3: "",
+                    City: "",
+                    Country: "",
+                    CountryCode: "",
+                    PostalCode: "",
+                },
+                DefaultPhone: {
+                    CountryCode: "",
+                    Description: "",
+                    Number: phone,
+                },
+                DefaultEmail: {
+                    EmailAddress: email,
+                },
+            },
+            Comment: comment,
+        };
 
         try {
             const response = await fetch(url, {
@@ -107,69 +107,71 @@
     </div>
     <div class="form-group">
         <label for="comment">Comment</label>
-        <textarea
-            id="comment"
-            bind:value={comment}
-        />
+        <textarea id="comment" bind:value={comment} />
     </div>
-    <div class="form-actions">
-        <button class="custom-button" on:click={createContact}>Create</button>
+    <div>
+        <button on:click={createContact}>Create</button>
         <button class="modal-close" on:click={close}>Close</button>
     </div>
 </form>
 
 <style>
+    button {
+        color: #fff;
+        background: #2253dd;
+        border: none;
+        border-radius: 1.5rem;
+        padding: 0.5rem 1.2rem;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
     .modal-close {
         margin-top: 10px;
+        background: #c7231b;
+    }
+
+    .modal-close:hover {
+        background: #9b1b15;
     }
 
     textarea {
-		width: 100%;
-		height: 200px;
-	}
+        width: 100%;
+        height: 200px;
+    }
 
     .custom-form {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
 
-  .form-group {
-    margin-bottom: 15px;
-  }
+    .form-group {
+        margin-bottom: 15px;
+    }
 
-  label {
-    display: block;
-    font-weight: bold;
-  }
+    label {
+        display: block;
+        font-weight: bold;
+    }
 
-  input[type="text"],
-  input[type="email"],
-  textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
 
-  .form-actions {
-    text-align: right;
-  }
-
-  .custom-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .custom-button:hover {
-    background-color: #0056b3;
-  }
+    .form-actions {
+        text-align: right;
+    }
 </style>

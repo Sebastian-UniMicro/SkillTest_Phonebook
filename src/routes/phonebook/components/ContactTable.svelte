@@ -2,6 +2,7 @@
   import EditContactForm from "./EditContactForm.svelte";
   import DeleteContactForm from "./DeleteContactForm.svelte";
   import Modal from "./Modal.svelte";
+  import { signOut } from "@auth/sveltekit/client";
 
   export let contacts = [
     {
@@ -45,7 +46,7 @@
   function toggleDropdown(contact) {
     console.log("Toggling dropdown for contact:", contact);
     contact.showDropdown = !contact.showDropdown;
-    console.log("You can see the dropdown = " + contact.showDropdown)
+    console.log("You can see the dropdown = " + contact.showDropdown);
   }
 
   function editContact(contact) {
@@ -164,52 +165,56 @@
   class="custom-search-input"
 />
 
-<table class="custom-table">
-  <thead>
-    <tr>
-      <th>
-        <button class="custom-button" on:click={setSortingToName}>
-          {selectedSorting === "name" ? "Name *" : "Name"}</button
-        >
-      </th>
-      <th>
-        <button class="custom-button" on:click={setSortingToPhone}>
-          {selectedSorting === "phone"
-            ? "Phone Number *"
-            : "Phone Number"}</button
-        >
-      </th>
-      <th>
-        <button class="custom-button" on:click={setSortingToEmail}>
-          {selectedSorting === "email" ? "Email *" : "Email"}</button
-        >
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each contacts
-      .filter(filterContacts)
-      .sort(sortingFunction) as contact (contact.ID)}
+<button class="logout-btn" on:click={() => signOut()}> Log out </button>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
       <tr>
-        <td>{contact.Info.Name}</td>
-        <td>{contact.Info.DefaultPhone.Number}</td>
-        <td>{contact.Info.DefaultEmail.EmailAddress}</td>
-        <td>
-          <button
-            class="ellipsis-button"
-            on:click={() => toggleDropdown(contact)}
-            ></button>
-          {#if contact.showDropdown}
-            <div class="dropdown">
-              <button on:click={() => editContact(contact)}>Edit</button>
-              <button on:click={() => deleteContact(contact)}>Delete</button>
-            </div>
-          {/if}
-        </td>
+        <th>
+          <button class="custom-button" on:click={setSortingToName}>
+            {selectedSorting === "name" ? "Name *" : "Name"}</button
+          >
+        </th>
+        <th>
+          <button class="custom-button" on:click={setSortingToPhone}>
+            {selectedSorting === "phone"
+              ? "Phone Number *"
+              : "Phone Number"}</button
+          >
+        </th>
+        <th>
+          <button class="custom-button" on:click={setSortingToEmail}>
+            {selectedSorting === "email" ? "Email *" : "Email"}</button
+          >
+        </th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each contacts
+        .filter(filterContacts)
+        .sort(sortingFunction) as contact (contact.ID)}
+        <tr>
+          <td>{contact.Info.Name}</td>
+          <td>{contact.Info.DefaultPhone.Number}</td>
+          <td>{contact.Info.DefaultEmail.EmailAddress}</td>
+          <td>
+            <div>
+              <button
+                class="transformative-btn"
+                on:click={() => editContact(contact)}>Edit</button
+              >
+              <button
+                class="destructive-btn"
+                on:click={() => deleteContact(contact)}>Delete</button
+              >
+            </div>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
 
 <Modal {visible} {closeModal}>
   {#if activeModal === "edit"}
@@ -232,63 +237,41 @@
 </Modal>
 
 <style>
-.custom-search-input {
-  width: auto;
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-}
-
-.dropdown {
-  position: absolute;
-  z-index: 1;
-  display: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  padding: 5px;
-}
-
-  .dropdown button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 5px;
+  button {
+    background: #2253dd;
     border: none;
-    background: none;
+    border-radius: 1.5rem;
+    padding: 0.5rem 1.2rem;
     cursor: pointer;
   }
 
-  /*TODO Make ellipsis look good*/
-  .ellipsis-button {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    background-color: transparent;
-    border: none;
-    font-size: 18px; /* Adjust the size as needed */
-    cursor: pointer;
+  .custom-search-input {
+    width: auto;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
   }
 
-  .ellipsis-button::before {
-    content: "\22EE"; /* Unicode character for vertical ellipsis */
+  .table-container{
+    max-height: 800px; /* Adjust the maximum height as needed */
+    overflow-y: auto;
   }
 
   .custom-table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid #ddd; /* Add a border around the table */
+    border: 1px solid #ddd;
   }
 
-  /* Style the table headers */
   .custom-table th {
     background-color: #f2f2f2;
     text-align: left;
     padding: 8px;
-    border-bottom: 1px solid #ddd; /* Add a bottom border to table headers */
+    border-bottom: 1px solid #ddd;
+    color: #000; /* Black text color */
   }
 
-  /* Style the button inside the table header cell */
   .custom-table th button {
     background: none;
     border: none;
@@ -298,26 +281,55 @@
     font-size: 16px;
   }
 
-  /* Add hover effect to the buttons */
   .custom-table th button:hover {
     text-decoration: underline;
   }
 
-  /* Style the table rows */
   .custom-table tr {
-    border-bottom: 1px solid #ddd; /* Add a bottom border to table rows */
+    border-bottom: 1px solid #ddd;
   }
 
-  /* Style the table cells */
   .custom-table td {
     padding: 8px;
-    border-bottom: 1px solid #ddd; /* Add a bottom border to table cells */
+    border-bottom: 1px solid #ddd;
   }
 
-  /* Style the last row (footer) */
   .custom-table tfoot tr {
-    border-top: 1px solid #ddd; /* Add a top border to the last row */
+    border-top: 1px solid #ddd;
   }
 
+  .destructive-btn {
+    color: #fff;
+    background: #c7231b;
+  }
 
+  .destructive-btn:hover {
+    color: #fff;
+    background: #9b1b15;
+  }
+
+  .transformative-btn {
+    color: #fff;
+  }
+
+  .transformative-btn:hover {
+    color: #fff;
+    background-color: #0056b3;
+  }
+
+  .logout-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #c7231b;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .logout-btn:hover {
+    background: #9b1b15;
+  }
 </style>

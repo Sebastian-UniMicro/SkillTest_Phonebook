@@ -6,6 +6,7 @@
     import Modal from './components/Modal.svelte';
     import CreateContactForm from './components/CreateContactForm.svelte';
     import { goto } from '$app/navigation';
+    import { signOut } from '@auth/sveltekit/client';
   
     export let contacts = [];
     let accessToken = $page?.data?.session?.access_token;
@@ -82,27 +83,27 @@
   />
 </Modal>
 
+<button on:click={GetContactsForTable}> Update table</button>
+
 <ContactTable {contacts} />
 
-<button on:click={GetContactsForTable}> Update table</button>
-<div><button on:click={() => goto("/home")}> check home </button></div>
 
 <style>
-    .custom-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
 
-  /* Define styles for different button states (e.g., hover, active) */
-  .custom-button:hover {
+button {
+        color: #fff;
+        background: #2253dd;
+        border: none;
+        border-radius: 1.5rem;
+        padding: 0.5rem 1.2rem;
+        cursor: pointer;
+    }
+
+  button:hover {
     background-color: #0056b3;
   }
 
-  .custom-button:active {
+  button:active {
     background-color: #00408a;
   }
 </style>
