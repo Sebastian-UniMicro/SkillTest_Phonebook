@@ -130,7 +130,18 @@
   }
 
   function setSortingToName() {
-    selectedSorting = 'Name';
+    selectedSorting = 'name';
+    sortContacts();
+  }
+
+  function setSortingToEmail() {
+    selectedSorting = 'email';
+    sortContacts();
+  }
+
+  function setSortingToPhone() {
+    selectedSorting = 'phone';
+    sortContacts();
   }
 </script>
 
@@ -145,13 +156,22 @@
 <button on:click={sortContacts}>Sort</button>
 
 <table class="custom-table">
-  <thead>
-    <tr>
-      <th> <button class="custom-button" on:click={setSortingToName} on:click={sortContacts}> Name </button> </th>
-      <th>Phone Number</th>
-      <th>Email</th>
-    </tr>
-  </thead>
+    <thead>
+      <tr>
+        <th>
+          <button class="custom-button" on:click={setSortingToName}>
+            {selectedSorting === "name" ? "Name *" : "Name"}</button>
+        </th>
+        <th>
+          <button class="custom-button" on:click={setSortingToPhone}>
+            {selectedSorting === "phone" ? "Phone Number *" : "Phone Number"}</button>
+        </th>
+        <th>
+          <button class="custom-button" on:click={setSortingToEmail}>
+            {selectedSorting === "email" ? "Email *" : "Email"}</button>
+        </th>
+      </tr>
+    </thead>
   <tbody>
     {#each contacts
       .filter(filterContacts)
@@ -240,6 +260,21 @@
     background-color: #f2f2f2;
     text-align: left;
     padding: 8px;
+  }
+
+  /* Style the button inside the table header cell */
+  .custom-table th button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  /* Add hover effect to the buttons */
+  .custom-table th button:hover {
+    text-decoration: underline;
   }
 
   /* Style the table rows */
