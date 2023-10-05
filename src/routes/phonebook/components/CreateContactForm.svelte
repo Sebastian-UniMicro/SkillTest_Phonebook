@@ -9,7 +9,8 @@
     let phone = "";
     let email = "";
     let comment = "";
-    let isFormValid = true;
+    let isFormValid = false;
+    let checkedFormValidation = false;
 
     const close = () => {
         event.preventDefault();
@@ -18,6 +19,8 @@
 
     const createContact = async () => {
         if (!isFormValid) {
+            console.log("You are missing Name: " + name + " or Phone: " + phone + " or Email is:" + isValidEmail(email));
+            checkedFormValidation = true;
             return; //Not Valid. Prevent submission
         }
         const url = `${PUBLIC_API_BASE_URL}/api/biz/contacts`;
@@ -86,6 +89,11 @@
             bind:value={name}
             on:input={validateForm}
         />
+        {#if !name && checkedFormValidation}
+        <span class="validation_fail_text">
+        Name is Required
+        </span>
+        {/if}
     </div>
     <div class="form-group">
         <label for="phone">Phone *</label>
@@ -95,6 +103,11 @@
             bind:value={phone}
             on:input={validateForm}
         />
+        {#if !phone && checkedFormValidation}
+        <span class="validation_fail_text">
+        Phone Number is Required
+        </span>
+        {/if}
     </div>
     <div class="form-group">
         <label for="email">Email *</label>
@@ -104,6 +117,15 @@
             bind:value={email}
             on:input={validateForm}
         />
+        {#if !email && checkedFormValidation}
+        <span class="validation_fail_text">
+        Email is Required
+        </span>
+        {:else if !isValidEmail(email) && checkedFormValidation}
+        <span class="validation_fail_text">
+            Must be a valid email
+            </span>
+        {/if}
     </div>
     <div class="form-group">
         <label for="comment">Comment</label>
@@ -173,5 +195,9 @@
 
     .form-actions {
         text-align: right;
+    }
+
+    .validation_fail_text {
+        color: #FF0000;
     }
 </style>
